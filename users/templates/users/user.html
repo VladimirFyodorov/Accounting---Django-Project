@@ -1,0 +1,44 @@
+{% extends 'users/layout.html' %}
+
+{% block body %}
+    {% if user.first_name %}
+        <l1>Welcome, {{ user.first_name }}</l1>
+    {% else %}
+        <l1>Welcome, {{ user.username }}</l1>
+    {% endif %}
+    <div>
+        <l1>You have to pay</l1>
+        {% if account_payable_by_lender %}
+            <ul>
+                {% for key, value in account_payable_by_lender.items %}
+                    <li><a href="{% url 'pay' key %}">You owe {{ value }} to {{ key }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+    <div>
+        {% if account_payable %}
+            <l1>You have to pay {{ account_payable }} in total</l1>
+        {% endif %}
+    </div>
+    <div>
+        <l1>You have to receive</l1>
+        {% if account_receivable_by_borrower %}
+            <ul>
+                {% for key, value in account_receivable_by_borrower.items %}
+                    <li><a href="{% url 'receive' key %}">{{ key }} ows you {{ value }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+    <div>
+        {% if account_receivable %}
+            <l1>You have to receive {{ account_receivable }} in total</l1>
+        {% endif %}
+    </div>
+    <ul>
+        <a href="{% url 'logout' %}">Log Out</a>
+    </ul>
+{% endblock %}

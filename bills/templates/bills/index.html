@@ -1,0 +1,25 @@
+{% extends 'bills/layout.html' %}
+
+{% block body %}
+    <l1>All bills</l1>
+    <ul>
+    {% for bill in bills %}
+        <li><a href="{% url 'bills:bill' bill_id=bill.id %}">{{ bill }}</a></li>
+    {% endfor %}
+    </ul>
+
+    <l1>Add a Bill</l1>
+
+    <form action="{% url 'bills:add' %}" method="post">
+        {% csrf_token %}
+        <input type="text" placeholder="name e.g. Лавка" name="name">
+        <input type="date" placeholder="date" name="date">
+        <select name="lender">
+            {% for user in users %}
+                <option value="{{ user.id }}">{{ user }}</option>
+            {% endfor %}
+        </select>
+        <input type="text" placeholder="comment" name="comment">
+        <input type="submit">
+    </form>
+{% endblock %}

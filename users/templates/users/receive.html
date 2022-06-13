@@ -1,0 +1,27 @@
+{% extends 'users/layout.html' %}
+
+{% block body %}
+    <l1>{{ borrower }} makes payment to {{ user }}</l1>
+    {% if bill_payment %}
+    <ul>
+    {% for bill, payment in bill_payment %}
+        <li>{{bill}}
+            <ul>
+                {% for payment_id, item_name, paying_amount in payment %}
+                    <li>For {{item_name}} pay {{paying_amount}}</li>
+                {% endfor %}
+            </ul>
+            <form action="{% url 'receive_payment' borrower.username %}" method="post">
+                {% csrf_token %}
+                <select name="payments_ids" multiple>
+                    {% for payment_id, item_name, paying_amount in payment %}
+                        <option value="{{ payment_id }}">For {{item_name}} pay {{paying_amount}}</option>
+                    {% endfor %}
+                </select>
+                <input type="submit">
+            </form>
+        </li>
+    {% endfor %}
+    </ul>
+{% endif %}
+{% endblock %}

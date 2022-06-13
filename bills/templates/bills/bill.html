@@ -1,0 +1,71 @@
+{% extends 'bills/layout.html' %}
+
+{% block body %}
+    <l1>{{ bill }}</l1>
+    {% if bill.items %}
+        <ul>
+        {% for item in items %}
+            <li>{{ item }}</li>
+        {% endfor %}
+        </ul>
+        <div>
+            Total: {{ total_costs }}
+        </div>
+    {% else %}
+        <l3>Bill has no items</l3>
+    {% endif %}
+    <div>
+        <l1>Add an Item</l1>
+
+        <form action="{% url 'bills:add_item' bill.id %}" method="post">
+            {% csrf_token %}
+            <input type="text" placeholder="name e.g. Чиабатта" name="name">
+            <input type="number" placeholder="кол-во" name="amount">
+            <input type="number" placeholder="затраты на штуку" name="cost_per_exemplar">
+            <input type="submit">
+        </form>
+
+    </div>
+
+    <div>
+        <l1>Assagn payment</l1>
+
+        <form action="{% url 'bills:assign_payment' bill.id %}" method="post">
+            {% csrf_token %}
+            <select name="item">
+                {% for item in items %}
+                    <option value="{{ item.id }}">{{ item }}</option>
+                {% endfor %}
+            </select>
+            <select name="payer">
+                {% for user in users %}
+                    <option value="{{ user.id }}">{{ user }}</option>
+                {% endfor %}
+            </select>
+            <input type="number" step="0.01" placeholder="доля затрат" name="paying_part">
+            <input type="submit">
+        </form>
+
+    </div>
+
+    <div>
+        <ul>
+        {% for payment in payments %}
+            <li>{{ payment }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+        <l1>Delete payment</l1>
+        <form action="{% url 'bills:delete_payment' bill.id %}" method="post">
+            {% csrf_token %}
+            <select name="payment">
+                {% for payment in payments %}
+                    <option value="{{ payment.id }}">{{ payment }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" placeholder="delete">
+        </form>
+    <div>
+
+    </div>
+{% endblock %}
