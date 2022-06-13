@@ -3,7 +3,6 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from bills.models import Bill, Item, Item_Payment
-import pandas as pd
 
 # Create your views here.
 # clean terminal print("\033[H\033[J", end="")
