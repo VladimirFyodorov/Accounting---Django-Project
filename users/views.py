@@ -95,8 +95,8 @@ def pay(request, lender_username):
 
 def make_payment(request, lender_username):
     if request.method == 'POST':
-        payments_ids = request.POST['payments_ids']
-        Item_Payment.objects.filter(id__in = payments_ids).update(is_payed=True)
+        payment_id = int(request.POST['payment_id'])
+        Item_Payment.objects.filter(id = payment_id).update(is_payed=True)
         return HttpResponseRedirect(reverse('pay', args=(lender_username, )))
 
 
@@ -123,7 +123,9 @@ def receive(request, borrower_username):
 
 def receive_payment(request, borrower_username):
     if request.method == 'POST':
-        payments_ids = request.POST['payments_ids']
-        Item_Payment.objects.filter(id__in = payments_ids).update(is_payed=True)
-        return HttpResponseRedirect(reverse('pay', args=(borrower_username, )))
+        #payments_ids = request.POST['payments_ids']
+        #Item_Payment.objects.filter(id__in = payments_ids).update(is_payed=True)
+        payment_id = int(request.POST['payment_id'])
+        Item_Payment.objects.filter(id = payment_id).update(is_payed=True)
+        return HttpResponseRedirect(reverse('receive', args=(borrower_username, )))
 

@@ -13,7 +13,7 @@
             </ul>
             <form action="{% url 'receive_payment' borrower.username %}" method="post">
                 {% csrf_token %}
-                <select name="payments_ids" multiple>
+                <select name="payment_id">
                     {% for payment_id, item_name, paying_amount in payment %}
                         <option value="{{ payment_id }}">For {{item_name}} pay {{paying_amount}}</option>
                     {% endfor %}

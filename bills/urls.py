@@ -5,6 +5,7 @@ app_name = 'bills'
 urlpatterns = [
     path('', views.index, name='index'), #, namespace='bills'
     path('add', views.add, name='add'),
+    path('delete_bill', views.delete_bill, name='delete_bill'),
     path('<int:bill_id>', views.bill, name='bill'),
     path('<int:bill_id>/add_item', views.add_item, name='add_item'),
     path('<int:bill_id>/assign_payment', views.assign_payment, name='assign_payment'),

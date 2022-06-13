@@ -22,4 +22,14 @@
         <input type="text" placeholder="comment" name="comment">
         <input type="submit">
     </form>
+    <l1>Delete a Bill</l1>
+    <form action="{% url 'bills:delete_bill' %}" method="post">
+        {% csrf_token %}
+        <select name="bill_id">
+            {% for bill in bills %}
+                <option value="{{ bill.id }}">{{ bill }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit">
+    </form>
 {% endblock %}

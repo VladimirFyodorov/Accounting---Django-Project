@@ -31,6 +31,16 @@ def add(request):
 
 
 
+def delete_bill(request):
+    if request.method == 'POST':
+        bill_id = int(request.POST['bill_id'])
+        bill = Bill.objects.get(id = bill_id)
+        bill.delete()
+
+        return HttpResponseRedirect(reverse('bills:index'))
+
+
+
 def bill(request, bill_id):
     users = get_user_model().objects.all()
     bill = Bill.objects.get(id = bill_id)
@@ -62,7 +72,6 @@ def add_item(request, bill_id):
         item = Item(name=name, amount=amount, cost_per_exemplar = cost_per_exemplar, bill=bill)
         item.save()
         return HttpResponseRedirect(reverse('bills:bill', args=(bill_id, )))
-
 
 
 def assign_payment(request, bill_id):
