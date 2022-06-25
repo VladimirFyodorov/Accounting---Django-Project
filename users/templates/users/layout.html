@@ -1,9 +1,23 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="{% static '/css/main.css' %}">
         <title>Users</title>
     </head>
     <body>
+        <header>
+            <nav>
+                <ul class="menu">
+                    <li class="menu-item-current"><a href= {% url 'users:index' %}>Main</a></li>
+                    <li class="menu-item"><a href= {% url 'bills:index' %}>Bills</a></li>
+                    <li class="menu-item">API</li>
+                    <li class="menu-item">About</li>
+                </ul>
+            </nav>
+        </header>
         {% block body %}
         {% endblock %}
     </body>

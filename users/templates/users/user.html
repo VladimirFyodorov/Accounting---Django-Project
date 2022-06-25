@@ -11,7 +11,7 @@
         {% if account_payable_by_lender %}
             <ul>
                 {% for key, value in account_payable_by_lender.items %}
-                    <li><a href="{% url 'pay' key %}">You owe {{ value }} to {{ key }}</a></li>
+                    <li><a href="{% url 'users:pay' key %}">You owe {{ value }} to {{ key }}</a></li>
                 {% endfor %}
             </ul>
         {% endif %}
@@ -27,7 +27,7 @@
         {% if account_receivable_by_borrower %}
             <ul>
                 {% for key, value in account_receivable_by_borrower.items %}
-                    <li><a href="{% url 'receive' key %}">{{ key }} ows you {{ value }}</a></li>
+                    <li><a href="{% url 'users:receive' key %}">{{ key }} ows you {{ value }}</a></li>
                 {% endfor %}
             </ul>
         {% endif %}
@@ -39,6 +39,6 @@
         {% endif %}
     </div>
     <ul>
-        <a href="{% url 'logout' %}">Log Out</a>
+        <a href="{% url 'users:logout' %}">Log Out</a>
     </ul>
 {% endblock %}

@@ -1,35 +1,61 @@
 {% extends 'bills/layout.html' %}
 
 {% block body %}
-    <l1>All bills</l1>
-    <ul>
-    {% for bill in bills %}
-        <li><a href="{% url 'bills:bill' bill_id=bill.id %}">{{ bill }}</a></li>
-    {% endfor %}
-    </ul>
-
-    <l1>Add a Bill</l1>
-
-    <form action="{% url 'bills:add' %}" method="post">
-        {% csrf_token %}
-        <input type="text" placeholder="name e.g. Лавка" name="name">
-        <input type="date" placeholder="date" name="date">
-        <select name="lender">
-            {% for user in users %}
-                <option value="{{ user.id }}">{{ user }}</option>
-            {% endfor %}
-        </select>
-        <input type="text" placeholder="comment" name="comment">
-        <input type="submit">
-    </form>
-    <l1>Delete a Bill</l1>
-    <form action="{% url 'bills:delete_bill' %}" method="post">
-        {% csrf_token %}
-        <select name="bill_id">
-            {% for bill in bills %}
-                <option value="{{ bill.id }}">{{ bill }}</option>
-            {% endfor %}
-        </select>
-        <input type="submit">
-    </form>
+<div class="mainBox">
+    <div class="listBox">
+        <l1 class="title">All bills</l1>
+        <div class="card">
+            <div class="card-body">
+                <ul class="list">
+                    {% for bill in bills %}
+                    <li><a href="{% url 'bills:bill' bill_id=bill.id %}">{{ bill }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="actionsBox">
+        <l1 class="title">Add Bill</l1>
+        <form action="{% url 'bills:add' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Bill name</label>
+                <input class="form-control" type="text" placeholder="name e.g. Лавка" name="name">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Date of the bill</label>
+                <input class="form-control" type="date" placeholder="date" name="date">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Choose who payed</label>
+                <select class="form-control" name="lender">
+                    {% for user in users %}
+                    <option value="{{ user.id }}">{{ user }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Comment</label>
+                <input class="form-control" type="text" placeholder="comment" name="comment">
+                <small class="form-text text-muted">Comment is optional </small>
+            </div>
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+    </div>
+    <div class="actionsBox">
+        <l1 class="title">Delete Bill</l1>
+        <form action="{% url 'bills:delete_bill' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="exampleInputEmail1">Choose bill</label>
+                <select class="form-control" name="bill_id">
+                    {% for bill in bills %}
+                    <option value="{{ bill.id }}">{{ bill }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Delete</button>
+        </form>
+    </div>
+</div>
 {% endblock %}

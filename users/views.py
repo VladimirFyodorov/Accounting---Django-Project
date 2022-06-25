@@ -8,7 +8,7 @@ from bills.models import Bill, Item, Item_Payment
 # clean terminal print("\033[H\033[J", end="")
 def index(request):
     if not request.user.is_authenticated:
-        return HttpResponseRedirect(reverse('login'))
+        return HttpResponseRedirect(reverse('users:login'))
     else:
         user = request.user
 
@@ -55,7 +55,7 @@ def login_view(request):
 
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse('index'))
+            return HttpResponseRedirect(reverse('users:index'))
 
         else:
             return render(request, 'users/login.html', {
@@ -97,7 +97,7 @@ def make_payment(request, lender_username):
     if request.method == 'POST':
         payment_id = int(request.POST['payment_id'])
         Item_Payment.objects.filter(id = payment_id).update(is_payed=True)
-        return HttpResponseRedirect(reverse('pay', args=(lender_username, )))
+        return HttpResponseRedirect(reverse('users:pay', args=(lender_username, )))
 
 
 def receive(request, borrower_username):
@@ -127,5 +127,5 @@ def receive_payment(request, borrower_username):
         #Item_Payment.objects.filter(id__in = payments_ids).update(is_payed=True)
         payment_id = int(request.POST['payment_id'])
         Item_Payment.objects.filter(id = payment_id).update(is_payed=True)
-        return HttpResponseRedirect(reverse('receive', args=(borrower_username, )))
+        return HttpResponseRedirect(reverse('users:receive', args=(borrower_username, )))
 
