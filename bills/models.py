@@ -9,8 +9,19 @@ class Bill(models.Model):
     date = models.DateField()
     comment = models.CharField(max_length=500, blank=True)
     lender = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='lender', editable = True, blank=True)
-    #items = models.ManyToOneRel(to=Item, field_name=name, related_name='bill')
-    #cost_total = sum(items.cost_total)
+    
+    def _is_payed(self):
+        "Returns true if it has payments and all payments are payed"
+        all_items = Item.objects.filter(bill = self).all()
+        Payed_payments = Item_Payment.objects.filter(item__in = all_items).filter(is_payed = True).all()
+        All_payments = Item_Payment.objects.filter(item__in = all_items).all()
+
+        if All_payments and (list(All_payments) == list(Payed_payments)):
+            return True
+        else:
+            return False
+    
+    is_payed = property(_is_payed)
     
     def __str__(self):
         return f'{self.name} {self.date}' #: {self.cost_total}rub'
@@ -46,7 +57,7 @@ class Item_Payment(models.Model):
     # https://stackoverflow.com/questions/17682567/how-to-add-a-calculated-field-to-a-django-model
     def _get_paying_amount(self):
         "Returns the paing amount"
-        return self.paying_part*self.item.cost_per_exemplar*self.item.amount
+        return round(self.paying_part*self.item.cost_per_exemplar*self.item.amount, 2)
     
     paying_amount = property(_get_paying_amount)
 

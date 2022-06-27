@@ -1,44 +1,85 @@
 {% extends 'users/layout.html' %}
 
 {% block body %}
-    {% if user.first_name %}
-        <l1>Welcome, {{ user.first_name }}</l1>
-    {% else %}
-        <l1>Welcome, {{ user.username }}</l1>
-    {% endif %}
-    <div>
-        <l1>You have to pay</l1>
-        {% if account_payable_by_lender %}
-            <ul>
-                {% for key, value in account_payable_by_lender.items %}
-                    <li><a href="{% url 'users:pay' key %}">You owe {{ value }} to {{ key }}</a></li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    </div>
 
+<header class="subHeader">
     <div>
-        {% if account_payable %}
-            <l1>You have to pay {{ account_payable }} in total</l1>
+        {% if user.first_name %}
+        <l1 class="title">Welcome, {{ user.first_name }}</l1>
+        {% else %}
+        <l1 class="title">Welcome, {{ user.username }}</l1>
         {% endif %}
     </div>
     <div>
-        <l1>You have to receive</l1>
-        {% if account_receivable_by_borrower %}
-            <ul>
-                {% for key, value in account_receivable_by_borrower.items %}
-                    <li><a href="{% url 'users:receive' key %}">{{ key }} ows you {{ value }}</a></li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    </div>
-
-    <div>
-        {% if account_receivable %}
-            <l1>You have to receive {{ account_receivable }} in total</l1>
-        {% endif %}
-    </div>
-    <ul>
         <a href="{% url 'users:logout' %}">Log Out</a>
-    </ul>
+    </div>
+</header>
+
+
+<div class="mainBox">
+    <div class="actionsBox" style="width: 40%;  padding-left: 0%;">
+        <l1 class="title">Account payable</l1>
+        <div class="card">
+            <div class="card-body">
+                {% if account_payable_by_lender %}
+                <ul class="list">
+                    {% for key, value in account_payable_by_lender.items %}
+                    <li><a href="{% url 'users:pay' key %}">You owe {{ value }} to {{ key }}</a></li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <div>
+                {% if account_payable %}
+                <l1>You have to pay {{ account_payable }} in total</l1>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+    <div class="actionsBox" style="width: 40%; padding-left: 5%;">
+        <l1 class="title">Account receivable</l1>
+        <div class="card">
+            <div class="card-body">
+                {% if account_receivable_by_borrower %}
+                <ul class="list">
+                    {% for key, value in account_receivable_by_borrower.items %}
+                    <li><a href="{% url 'users:receive' key %}">{{ key }} ows you {{ value }}</a></li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+
+            <div>
+                {% if account_receivable %}
+                <l1>You have to receive {{ account_receivable }} in total</l1>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+    <div class="actionsBox" style="width: 40%; padding-left: 5%;">
+        <l1 class="title">Account Net</l1>
+        <div class="card">
+            <div class="card-body">
+                {% if account_Net_by_user %}
+                <ul class="list">
+                    {% for key, value in account_Net_by_user.items %}
+                    <li>Net sum with {{ key }} is {{ value }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+
+            <div>
+                {% if account_Net %}
+                <l1>Your Net sum is {{ account_Net }} in total</l1>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

@@ -9,11 +9,19 @@ from .models import Bill, Item, Item_Payment
 
 # Create your views here.
 def index(request):
-    bills = Bill.objects.all()
+    All_bills = Bill.objects.all()
+    
+    # not payed bills [bill_str, bill_id]
+    not_payed_bills = []
+    for bill in All_bills:
+        if not bill.is_payed:
+            not_payed_bills.append([str(bill), bill.id])
+
+
     User = get_user_model()
     users = User.objects.all()
     return render(request, 'bills/index.html', {
-            'bills': bills,
+            'not_payed_bills': not_payed_bills,
             'users': users
         })
 
@@ -44,8 +52,8 @@ def delete_bill(request):
 def bill(request, bill_id):
     users = get_user_model().objects.all()
     bill = Bill.objects.get(id = bill_id)
-    items = Item.objects.filter(bill = bill).all()
-    payments = Item_Payment.objects.filter(item__in = items).all()
+    items = Item.objects.filter(bill = bill).all().order_by('id')
+    payments = Item_Payment.objects.filter(item__in = items).all().order_by('payer', 'item_id')
 
     # total cost is method therefore i have to iterate to count it
     total_costs = 0

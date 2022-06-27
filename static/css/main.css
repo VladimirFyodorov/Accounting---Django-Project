@@ -34,6 +34,7 @@ header {
     align-items: flex-end;
 }
 
+
 .menu {
     list-style-type: none;
     display: flex;
@@ -130,4 +131,9 @@ a {
     padding-left: 10%; 
     padding-right: 10%; 
     padding-bottom: 10%;
+}
+
+.choosePayment {
+    padding-left: 10%; 
+    margin-left: 10%; 
 }

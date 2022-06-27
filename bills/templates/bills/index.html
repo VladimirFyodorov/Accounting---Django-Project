@@ -7,8 +7,8 @@
         <div class="card">
             <div class="card-body">
                 <ul class="list">
-                    {% for bill in bills %}
-                    <li><a href="{% url 'bills:bill' bill_id=bill.id %}">{{ bill }}</a></li>
+                    {% for bill_str, bill_id in not_payed_bills %}
+                    <li><a href="{% url 'bills:bill' bill_id=bill_id %}">{{ bill_str }}</a></li>
                     {% endfor %}
                 </ul>
             </div>
@@ -49,8 +49,8 @@
             <div class="form-group">
                 <label for="exampleInputEmail1">Choose bill</label>
                 <select class="form-control" name="bill_id">
-                    {% for bill in bills %}
-                    <option value="{{ bill.id }}">{{ bill }}</option>
+                    {% for bill_str, bill_id in not_payed_bills %}
+                    <option value="{{ bill_id }}">{{ bill_str }}</option>
                     {% endfor %}
                 </select>
             </div>

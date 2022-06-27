@@ -1,27 +1,58 @@
 {% extends 'users/layout.html' %}
 
 {% block body %}
-    <l1>{{ user }} makes payment to {{ lender }}</l1>
+<header class="subHeader">
+    <div>
+        {% if user.first_name %}
+        <l1 class="title">{{ user.first_name }} pays to {{ lender }}</l1>
+        {% else %}
+        <l1 class="title">{{ user.username }} pays to {{ lender }}</l1>
+        {% endif %}
+    </div>
+    <div>
+        <a href="{% url 'users:logout' %}">Log Out</a>
+    </div>
+</header>
+
+<div class="mainBox">
     {% if bill_payment %}
-        <ul>
-        {% for bill, payment in bill_payment %}
-            <li>{{bill}}
-                <ul>
-                    {% for payment_id, item_name, paying_amount in payment %}
-                        <li>For {{item_name}} pay {{paying_amount}}</li>
-                    {% endfor %}
-                </ul>
-                <form action="{% url 'make_payment' lender.username %}" method="post">
+    <div>
+        {% for bill, bill_total, payment in bill_payment %}
+        <div class="subMainBox">
+            <div style="width: 50%;">
+                <l1 class="title">{{bill}}</l1>
+                <div class="card">
+                    <div class="card-body">
+                        <ul class="list">
+                            {% for payment_id, item_name, paying_amount, paying_part in payment %}
+                            <li>For {{item_name}} pay {{paying_amount}} ({{paying_part}} share)</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="paymentsBox" style="padding-left: 10%; padding-top: 5%;">
+                <form action="{% url 'users:make_payment' lender.username %}" method="post">
                     {% csrf_token %}
-                    <select name="payment_id">
-                        {% for payment_id, item_name, paying_amount in payment %}
-                            <option value="{{ payment_id }}">For {{item_name}} pay {{paying_amount}}</option>
-                        {% endfor %}
-                    </select>
-                    <input type="submit">
+                    <div class="form-group">
+                        <label>Choose payment</label>
+                        <select name="payment_id" class="form-control">
+                            {% for payment_id, item_name, paying_amount, paying_part in payment %}
+                            <option value="{{ payment_id }}">For {{item_name}} pay {{paying_amount}} ({{paying_part}}
+                                share)</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Make payment</button>
                 </form>
-            </li>
+            </div>
+        </div>
         {% endfor %}
-        </ul>
+    </div>
+    {% else %}
+    <div>
+        <l1>You have no payments</l1>
+    </div>
     {% endif %}
+</div>
 {% endblock %}
