@@ -87,7 +87,8 @@ def login_view(request):
             return render(request, 'users/login.html', {
                 'message': 'Login or Password is incorrect'
             })
-    return render(request, 'users/login.html')
+    #return render(request, 'users/login.html')
+    return render(request, 'users/loginNew.html')
 
 
 def logout_view(request):

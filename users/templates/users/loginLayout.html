@@ -1,0 +1,23 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/login.css' %}">
+    <title>Users</title>
+</head>
+
+<body>
+    <div id="page-container">
+        <div id="content-wrap">
+            {% block body %}
+            {% endblock %}
+        </div>
+        <footer id="footer">
+            Если сайт не работает, звоните Владимиру: +7 985 455-24-65
+        </footer>
+    </div>
+</body>
+
+</html>
