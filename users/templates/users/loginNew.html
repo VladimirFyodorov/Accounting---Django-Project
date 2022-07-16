@@ -9,10 +9,13 @@
             Create an account
         </a>
     </h3>
-    <div class="input">
-        <h4>Email address</h4>
-        <input type="text" id="email">
-    </div>
-    <button class="btn-login">Continue</button>
+    <form action="{% url 'users:login' %}" method="post">
+        {% csrf_token %}
+        <div class="input">
+            <h4>Email address</h4>
+            <input type="text" name="email">
+        </div>
+        <button class="btn-login" type="submit">Continue</button>
+    </form>
 </div>
 {% endblock %}

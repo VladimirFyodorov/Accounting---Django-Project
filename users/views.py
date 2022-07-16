@@ -87,8 +87,46 @@ def login_view(request):
             return render(request, 'users/login.html', {
                 'message': 'Login or Password is incorrect'
             })
-    #return render(request, 'users/login.html')
-    return render(request, 'users/loginNew.html')
+    return render(request, 'users/loginNew.html') # 'users/login.html'
+
+
+def login(request):
+    if request.method == 'POST' and len(request.POST['email']) > 0:
+        emails = get_user_model().objects.values_list('email', flat=True).all()
+        email = request.POST['email']
+        if email in emails:
+            user = get_user_model().objects.get(email = email)
+            first_name = user.first_name
+            last_name = user.last_name
+            return render(request, 'users/loginNew.html', {
+                'first_name': first_name,
+                'last_name': last_name,
+                'email': email,
+                'form_numer': 2,
+            })
+        
+    if request.method == 'POST' and request.POST['email'] and request.POST['password']:
+        email = request.POST['email']
+        password = request.POST['password']
+        user = authenticate(request, email = email, password = password)
+
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect(reverse('users:index'))
+
+        else:
+            return render(request, 'users/loginNew.html', {
+                'first_name': get_user_model().objects.get(email = email).first_name,
+                'last_name': get_user_model().objects.get(email = email).last_name,
+                'email': email,
+                'form_numer': 2,
+                'message': 'Login or Password is incorrect'
+            })
+
+    return render(request, 'users/loginNew.html', {
+        'form_numer': 1
+    })
+
 
 
 def logout_view(request):

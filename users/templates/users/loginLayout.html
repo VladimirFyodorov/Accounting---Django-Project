@@ -18,6 +18,10 @@
             Если сайт не работает, звоните Владимиру: +7 985 455-24-65
         </footer>
     </div>
+    {% if form_numer %}
+        <div class="toshow" style="display:none" id="form_numer">{{ form_numer }}</div>
+    {% endif %}
+    <script src="{% static '/js/login.js' %}"></script>
 </body>
 
 </html>
