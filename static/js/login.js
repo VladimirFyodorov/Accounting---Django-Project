@@ -1,11 +1,12 @@
 window.addEventListener('DOMContentLoaded', function() {
     'use strict';
 
-    let form_numer = document.getElementById('form_numer');
+    let form_numer = document.getElementById('form_numer'),
+        forms = document.querySelectorAll('.form');
 
-    console.log(form_numer);
-
-    if (form_numer.value == 2) {
-        this.alert('averica');
+    if (form_numer.textContent == 2) {
+        forms[0].style.display = 'none';
+        forms[1].style.display = 'block';
     }
+
 });

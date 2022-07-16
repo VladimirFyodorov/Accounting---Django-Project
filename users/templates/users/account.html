@@ -1,0 +1,74 @@
+{% extends 'users/accountLayout.html' %}
+
+{% block body %}
+<h1>Account</h1>
+<div class="account-menu">
+    <div class="account-menu-items" id="account-menu-item-net">Net</div>
+    <div class="account-menu-items" id="account-menu-item-payable">Payable</div>
+    <div class="account-menu-items" id="account-menu-item-receivable">Receivable</div>
+</div>
+<table class="account-table" id="account-table-net">
+    {% if account_Net_by_user %}
+    {% for key, value in account_Net_by_user.items %}
+    <tr>
+        <td class="user">{{ key }}</td>
+        <td class="amount">{{ value }}</td>
+        <td class="rub">rub</td>
+        <td><button>Pay</button></td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td class="user total">Total</td>
+        <td class="amount total">{{ account_Net }}</td>
+        <td class="rub total">rub</td>
+        <td></td>
+    </tr>
+    {% endif %}
+</table>
+<ul>
+    {% for id, value in account_payables_v_to_v_ids.items %}
+    <li>{{id}} and {{value}}</li>
+    {% endfor %}
+    <li>{{ user.first_name }}</li>
+</ul>
+
+
+
+<table class="account-table" style="display:none;" id="account-table-payable">
+    {% if account_payable_by_lender %}
+    {% for key, value in account_payable_by_lender.items %}
+    <tr>
+        <td class="user">{{ key }}</td>
+        <td class="amount">{{ value }}</td>
+        <td class="rub">rub</td>
+        <td><button>Pay</button></td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td class="user total">Total</td>
+        <td class="amount total">{{ account_payable }}</td>
+        <td class="rub total">rub</td>
+        <td></td>
+    </tr>
+    {% endif %}
+</table>
+
+<table class="account-table" style="display:none;" id="account-table-receivable">
+    {% if account_receivable_by_borrower %}
+    {% for key, value in account_receivable_by_borrower.items %}
+    <tr>
+        <td class="user">{{ key }}</td>
+        <td class="amount">{{ value }}</td>
+        <td class="rub">rub</td>
+        <td><button>Receive</button></td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td class="user total">Total</td>
+        <td class="amount total">{{ account_receivable }}</td>
+        <td class="rub total">rub</td>
+        <td></td>
+    </tr>
+    {% endif %}
+</table>
+{% endblock %}

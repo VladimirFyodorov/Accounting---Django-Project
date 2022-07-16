@@ -1,14 +1,54 @@
-{% extends 'users/layout.html' %}
+{% extends 'users/loginLayout.html' %}
 
 {% block body %}
-    {% if message %}
-        <div>{{ message }}</div>
-    {% endif %}
+<div class="form" id="form">
+    <h1>Sign in</h1>
+    <h2>Continue with email</h2>
+    <h3 style="font-weight: normal;">New user? 
+        <a href="{% url 'users:logout' %}" class="link" style="text-decoration: none;">
+            Create an account
+        </a>
+    </h3>
     <form action="{% url 'users:login' %}" method="post">
         {% csrf_token %}
-        <input type="text" name="username" placeholder="username">
-        <input type="password" name="password" placeholder="password">
-        <input type="submit" value="Login">
-
+        <input type="password" name="password" value="" style="display:none;">
+        <div class="input">
+            <h4 class="input-hint">Email address</h4>
+            <input type="text" name="email">
+        </div>
+        {% if message %}
+        <h4>{{message}}</h4>
+        {% endif %}
+        <button class="btn-login" type="submit">Continue</button>
     </form>
+</div>
+
+
+
+<div class="form" id="form" style="display:none;">
+    <h1>Enter your password</h1>
+    <div class="login-user-box">
+        <div class="login-user-box-circle">
+            {{ first_name_first_letter }}{{ last_name_first_letter }}
+        </div>
+        <div class="login-user-box-info">
+            <h4>{{ first_name }} {{ last_name }}</h4>
+            <h4>{{ email }}</h4>
+        </div>
+    </div>
+
+    <form action="{% url 'users:login' %}" method="post">
+        {% csrf_token %}
+        <!-- hidden email input -->
+        <input type="text" name="email" value="{{ email }}" style="display:none;">
+        <div class="input">
+            <h4 class="input-hint">Password</h4>
+            <input type="password" name="password">
+        </div>
+        {% if message %}
+        <h4>{{message}}</h4>
+        {% endif %}
+        <button class="btn-login" type="submit">Continue</button>
+    </form>
+</div>
 {% endblock %}

@@ -1,8 +1,10 @@
 body {
     margin: 0;
-    padding: 0;
+    /*padding-left: 120px;
+    /*padding-right: 120px;
     top:0;
-    width: 1440px;
+    /*width: 1440px;*/
+    width: 100%;
     font-family: 'PT Sans';
 }
 
@@ -13,21 +15,21 @@ body {
 
 #content-wrap {
     padding-bottom: 2.5rem;   /* Footer height */
+    padding-left: 120px;
 }
 
 #footer {
-    padding-left: 100px;
+    padding-left: 120px;
     padding-top: 10px;
     position: absolute;
-    width: 1340px;
     bottom: 0;
     height: 40px;  /* Footer height */
     font-size: 12px;
     color: rgba(58, 58, 58, 1);
 }
 
-#form {
-    /*background-color: wheat;*/
+
+.form {
     float: right;
     width: 423px;
     height: 495px;
@@ -37,6 +39,7 @@ body {
     border-radius: 4px;
     box-shadow: 2px 6px 20px 2px rgba(0, 0, 0, 0.15);
 }
+
 
 h1 {
     font-size: 42px;
@@ -60,6 +63,10 @@ h4 {
     font-size: 14px;
     font-weight: normal;
     margin: 0px;
+    color: rgba(58, 58, 58, 1);
+}
+
+h4.input-hint {
     color:rgba(113, 113, 113, 1);
 }
 
@@ -92,4 +99,28 @@ button.btn-login {
     margin-left: 223px;
     border-width: 0px;
     border-radius: 6px;
+}
+
+div.login-user-box {
+    display: flex;
+    /* justify-content: flex-start; */
+    margin-top: 32px;
+    margin-bottom: 40px;
+}
+
+div.login-user-box-circle {
+    border-radius: 50%;
+    border: 1px solid black;
+    text-align: center;
+    padding-top: 12px;
+    height: 43px;
+    width: 55px;
+    font-size: 26px;
+    font-weight: normal;
+    color: black;
+    line-height: 34px;
+}
+
+div.login-user-box-info {
+    margin: 10px;
 }
