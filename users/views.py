@@ -4,81 +4,135 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from bills.models import Bill, Item, Item_Payment
 
+## custom libs
+import python_libs.send_email as se
+
 # Create your views here.
 # clean terminal print("\033[H\033[J", end="")
 def index(request):
+
+    ### declare main function ###
+    acc_user = request.user
+
+    # counting Account payable total and grouped by lender username
+    account_payable = 0
+    account_payable_by_lender = {}
+    for user in get_user_model().objects.exclude(id = acc_user.id).all():
+        account_payable_by_lender[user.first_name] = 0
+
+    for payment in Item_Payment.objects.filter(payer = acc_user).filter(is_payed = False).all():
+        account_payable -= payment.paying_amount
+        lender_id = payment.item.bill.lender.id
+        lender_first_name = get_user_model().objects.get(id = lender_id).first_name
+        account_payable_by_lender[lender_first_name] -= payment.paying_amount
+    
+
+    # counting Account receivable total and grouped by borrower username
+    account_receivable = 0
+    account_receivable_by_borrower = {}
+    for user in get_user_model().objects.exclude(id = acc_user.id).all():
+        account_receivable_by_borrower[user.first_name] = 0
+
+    for payment in Item_Payment.objects.all():
+        if payment.lender == acc_user and payment.is_payed == False:
+            account_receivable += payment.paying_amount
+            account_receivable_by_borrower[payment.payer.first_name] += payment.paying_amount
+
+
+    # counting Net result = account_receivable + account_payable
+    # because accounts payable are negative
+    account_Net = account_receivable + account_payable
+    account_Net_by_user = account_receivable_by_borrower.copy()
+
+    for key in account_payable_by_lender:
+        account_Net_by_user[key] += account_payable_by_lender[key]
+
+    
+    # rounding results
+    account_payable = round(account_payable)
+    account_receivable = round(account_receivable)
+    account_Net = round(account_Net)
+
+    for key in account_payable_by_lender:
+        account_payable_by_lender[key] = round(account_payable_by_lender[key])
+
+    for key in account_receivable_by_borrower:
+        account_receivable_by_borrower[key] = round(account_receivable_by_borrower[key])
+
+    for key in account_Net_by_user:
+        account_Net_by_user[key] = round(account_Net_by_user[key])
+
+    ##################### main script #####################
+    ########################################################
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('users:login'))
-    else:
-        acc_user = request.user
-        first_name_first_letter = acc_user.first_name[0]
-        last_name_first_letter = acc_user.last_name[0]
-        # counting Account payable total and grouped by lender username
-        account_payable = 0
-        account_payable_by_lender = {}
-        account_payable_by_lender = {}
-        account_payables_v_to_v_ids = []
-        for user in get_user_model().objects.all(): #.exclude(user = user):
-            account_payable_by_lender[user.first_name] = 0
 
-        for payment in Item_Payment.objects.filter(payer = acc_user).filter(is_payed = False).all():
-            account_payable += payment.paying_amount
-            lender_id = payment.item.bill.lender.id
-            lender_first_name = get_user_model().objects.get(id = lender_id).first_name
-            account_payable_by_lender[lender_first_name] += payment.paying_amount
-
-            if lender_id == 1:
-                account_payables_v_to_v_ids.append([payment.id, payment.paying_amount])
-
-
-        
-
-        # counting Account receivable total and grouped by borrower username
-        account_receivable = 0
-        account_receivable_by_borrower = {}
-        for user in get_user_model().objects.all(): #.exclude(user = user):
-            account_receivable_by_borrower[user.first_name] = 0
-
-        for payment in Item_Payment.objects.all():
-            if payment.lender == acc_user and payment.is_payed == False:
-                account_receivable += payment.paying_amount
-                account_receivable_by_borrower[payment.payer.first_name] += payment.paying_amount
-
-        
-        #counting Net result = account_receivable - account_payable
-        account_Net = account_receivable - account_payable
-        account_Net_by_user = account_receivable_by_borrower.copy()
-
-        for key in account_payable_by_lender:
-            account_Net_by_user[key] -= account_payable_by_lender[key]
-
-        
-        # rounding results
-        account_payable = -round(account_payable)
-        account_receivable = round(account_receivable)
-        account_Net = round(account_Net)
-
-        for key in account_payable_by_lender:
-            account_payable_by_lender[key] = -round(account_payable_by_lender[key])
-
-        for key in account_receivable_by_borrower:
-            account_receivable_by_borrower[key] = round(account_receivable_by_borrower[key])
-
-        for key in account_Net_by_user:
-            account_Net_by_user[key] = round(account_Net_by_user[key])
-
+    elif request.method != 'POST':
         return render(request, 'users/account.html', {
-                'user': user,
-                'first_name_first_letter': first_name_first_letter,
-                'last_name_first_letter': last_name_first_letter,
+                'user': acc_user,
+                'first_name_first_letter': acc_user.first_name[0],
+                'last_name_first_letter': acc_user.last_name[0],
                 'account_payable': account_payable,
                 'account_payable_by_lender': account_payable_by_lender,
                 'account_receivable': account_receivable,
                 'account_receivable_by_borrower': account_receivable_by_borrower,
                 'account_Net': account_Net,
                 'account_Net_by_user': account_Net_by_user,
-                'account_payables_v_to_v_ids': account_payables_v_to_v_ids
             })
+
+    elif request.method == 'POST':
+        contr_agent_first_name = request.POST['contr_agent_first_name']
+        contr_agent = get_user_model().objects.get(first_name = contr_agent_first_name)
+        contr_agent_fn = contr_agent.first_name
+        payment_type = request.POST['payment_type']
+        acc_user = request.user
+        acc_user_fn = acc_user.first_name
+
+        if payment_type == 'payable':
+            #closing payables
+            amount = 0
+            for payment in Item_Payment.objects.filter(payer = acc_user).filter(is_payed = False).all():
+                if payment.item.bill.lender.id == contr_agent.id:
+                    amount += payment.paying_amount
+                    Item_Payment.objects.filter(id = payment.id).update(is_payed = True)
+
+            #sending emails
+            se.send_payment_email(contr_agent.email, contr_agent_fn, acc_user_fn, amount)
+            se.get_payment_email(acc_user.email, contr_agent_fn, acc_user_fn, amount)
+
+            return HttpResponseRedirect(reverse('users:index'))
+            
+        
+        elif payment_type == 'receivable':
+            #closing receivables
+            amount = 0
+            for payment in Item_Payment.objects.all():
+                if payment.lender == acc_user and payment.is_payed == False:
+                    amount += payment.paying_amount
+                    Item_Payment.objects.filter(id = payment.id).update(is_payed = True)
+
+            #sending emails
+            se.send_payment_email(acc_user.email, contr_agent_fn, acc_user_fn, amount)
+            se.get_payment_email(contr_agent.email, contr_agent_fn, acc_user_fn, amount)
+
+            return HttpResponseRedirect(reverse('users:index'))
+        
+        elif payment_type == 'net':
+            #closing payables
+            for payment in Item_Payment.objects.filter(payer = acc_user).filter(is_payed = False).all():
+                if payment.item.bill.lender.id == contr_agent.id:
+                    Item_Payment.objects.filter(id = payment.id).update(is_payed = True)
+
+            #closing receivables
+            for payment in Item_Payment.objects.all():
+                if payment.lender == acc_user and payment.is_payed == False:
+                    Item_Payment.objects.filter(id = payment.id).update(is_payed = True)
+
+            return HttpResponseRedirect(reverse('users:index'))
+
+
+
+
 
 
 

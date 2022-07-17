@@ -1,6 +1,7 @@
 {% extends 'users/accountLayout.html' %}
 
 {% block body %}
+
 <h1>Account</h1>
 <div class="account-menu">
     <div class="account-menu-items" id="account-menu-item-net">Net</div>
@@ -14,7 +15,14 @@
         <td class="user">{{ key }}</td>
         <td class="amount">{{ value }}</td>
         <td class="rub">rub</td>
-        <td><button>Pay</button></td>
+        <td>
+            <form action="{% url 'users:index' %}" method="post">
+                {% csrf_token %}
+                <input name="contr_agent_first_name" value="{{ key }}" style="display:none" class="hidden-input">
+                <input name="payment_type" value="net" style="display:none" class="hidden-input">
+                <button type="submit">Pay</button>
+            </form>
+        </td>
     </tr>
     {% endfor %}
     <tr>
@@ -25,12 +33,6 @@
     </tr>
     {% endif %}
 </table>
-<ul>
-    {% for id, value in account_payables_v_to_v_ids.items %}
-    <li>{{id}} and {{value}}</li>
-    {% endfor %}
-    <li>{{ user.first_name }}</li>
-</ul>
 
 
 
@@ -41,7 +43,14 @@
         <td class="user">{{ key }}</td>
         <td class="amount">{{ value }}</td>
         <td class="rub">rub</td>
-        <td><button>Pay</button></td>
+        <td>
+            <form action="{% url 'users:index' %}" method="post">
+                {% csrf_token %}
+                <input name="contr_agent_first_name" value="{{ key }}" style="display:none" class="hidden-input">
+                <input name="payment_type" value="payable" style="display:none" class="hidden-input">
+                <button type="submit">Pay</button>
+            </form>
+        </td>
     </tr>
     {% endfor %}
     <tr>
@@ -60,7 +69,14 @@
         <td class="user">{{ key }}</td>
         <td class="amount">{{ value }}</td>
         <td class="rub">rub</td>
-        <td><button>Receive</button></td>
+        <td>
+            <form action="{% url 'users:index' %}" method="post">
+                {% csrf_token %}
+                <input name="contr_agent_first_name" value="{{ key }}" style="display:none" class="hidden-input">
+                <input name="payment_type" value="receivable" style="display:none" class="hidden-input">
+                <button type="submit">Receive</button>
+            </form>
+        </td>
     </tr>
     {% endfor %}
     <tr>

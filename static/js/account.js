@@ -49,11 +49,6 @@ window.addEventListener('DOMContentLoaded', function() {
                 this.style.backgroundColor = 'white';
                 this.style.color = 'black';
             });
-
-            btn.addEventListener('click', function() {
-                alert(5);
-            });
         }
     }
-
 });
