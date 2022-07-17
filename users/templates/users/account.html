@@ -8,6 +8,20 @@
     <div class="account-menu-items" id="account-menu-item-payable">Payable</div>
     <div class="account-menu-items" id="account-menu-item-receivable">Receivable</div>
 </div>
+
+<div class="account-popup-window" style="display:none;">
+    <div class="account-popup-window-textbox">
+        <h4 class="account-popup-window-username">{{ user.first_name }} {{ user.last_name }}</h4>
+        <h5>{{ user.email }}</h5>
+    </div>
+    <a href="{% url 'users:logout' %}" style="text-decoration: none;">
+        <div class="account-popup-window-signountbox">
+            <h5>Sign out</h5>
+        </div>
+    </a>
+</div>
+
+
 <table class="account-table" id="account-table-net">
     {% if account_Net_by_user %}
     {% for key, value in account_Net_by_user.items %}

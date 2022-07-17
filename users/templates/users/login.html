@@ -12,9 +12,9 @@
     <form action="{% url 'users:login' %}" method="post">
         {% csrf_token %}
         <input type="password" name="password" value="" style="display:none;">
-        <div class="input">
+        <div class="input-box">
             <h4 class="input-hint">Email address</h4>
-            <input type="text" name="email">
+            <input type="text" name="email" id="email">
         </div>
         {% if message %}
         <h4>{{message}}</h4>
@@ -41,9 +41,12 @@
         {% csrf_token %}
         <!-- hidden email input -->
         <input type="text" name="email" value="{{ email }}" style="display:none;">
-        <div class="input">
+        <div class="input-box">
             <h4 class="input-hint">Password</h4>
-            <input type="password" name="password">
+            <div class="input">
+                <input type="password" name="password" id="password">
+                <div class="bi bi-eye-slash" id="see-password-icon"></div>
+            </div>
         </div>
         {% if message %}
         <h4>{{message}}</h4>

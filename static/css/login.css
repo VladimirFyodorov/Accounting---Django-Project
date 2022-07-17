@@ -66,6 +66,13 @@ h4 {
     color: rgba(58, 58, 58, 1);
 }
 
+h5 {
+    font-size: 12px;
+    font-weight: normal;
+    margin: 0px;
+    color: rgba(58, 58, 58, 1);
+}
+
 h4.input-hint {
     color:rgba(113, 113, 113, 1);
 }
@@ -84,8 +91,12 @@ a.link {
     color: rgba(49, 139, 222, 1);
 }
 
-div.input {
+div.input-box {
     margin-top: 42px;
+}
+
+div.input {
+    display: flex;
 }
 
 button.btn-login {
@@ -123,4 +134,10 @@ div.login-user-box-circle {
 
 div.login-user-box-info {
     margin: 10px;
+}
+
+#see-password-icon {
+    margin-top: 6px;
+    margin-left: -30px;
+    cursor: pointer;
 }

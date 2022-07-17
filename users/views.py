@@ -96,7 +96,7 @@ def index(request):
                     amount += payment.paying_amount
                     Item_Payment.objects.filter(id = payment.id).update(is_payed = True)
 
-            #sending emails
+            #sending emails payables
             se.send_payment_email(contr_agent.email, contr_agent_fn, acc_user_fn, amount)
             se.get_payment_email(acc_user.email, contr_agent_fn, acc_user_fn, amount)
 
@@ -111,23 +111,37 @@ def index(request):
                     amount += payment.paying_amount
                     Item_Payment.objects.filter(id = payment.id).update(is_payed = True)
 
-            #sending emails
-            se.send_payment_email(acc_user.email, contr_agent_fn, acc_user_fn, amount)
-            se.get_payment_email(contr_agent.email, contr_agent_fn, acc_user_fn, amount)
+
+            #sending emails receivables
+            se.get_payment_email(contr_agent.email, acc_user_fn, contr_agent_fn, amount)
+            se.send_payment_email(acc_user.email, acc_user_fn, contr_agent_fn, amount)
 
             return HttpResponseRedirect(reverse('users:index'))
         
         elif payment_type == 'net':
             #closing payables
+            amount = 0
             for payment in Item_Payment.objects.filter(payer = acc_user).filter(is_payed = False).all():
                 if payment.item.bill.lender.id == contr_agent.id:
+                    amount -= payment.paying_amount
                     Item_Payment.objects.filter(id = payment.id).update(is_payed = True)
 
             #closing receivables
             for payment in Item_Payment.objects.all():
                 if payment.lender == acc_user and payment.is_payed == False:
+                    amount += payment.paying_amount
                     Item_Payment.objects.filter(id = payment.id).update(is_payed = True)
-
+            
+            if amount < 0:
+                #sending emails payables
+                amount = abs(amount)
+                se.send_payment_email(contr_agent.email, contr_agent_fn, acc_user_fn, amount)
+                se.get_payment_email(acc_user.email, contr_agent_fn, acc_user_fn, amount)
+            else:
+                #sending emails receivables
+                se.get_payment_email(contr_agent.email, acc_user_fn, contr_agent_fn, amount)
+                se.send_payment_email(acc_user.email, acc_user_fn, contr_agent_fn, amount)
+                
             return HttpResponseRedirect(reverse('users:index'))
 
 

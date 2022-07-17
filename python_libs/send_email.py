@@ -20,12 +20,17 @@ def formatNumber(amount):
 
 
 
-def send_payment_email(receiver_email, receiver, payer, amount):
+def send_payment_email(receiver_email, receiver, payer, amount, test = False):
 
     msg = EmailMessage()
-    msg['Subject'] = "TEST Payment"
+
+    if test:
+        msg['Subject'] = "TEST Payment"
+    else:
+        msg['Subject'] = "Payment"
+
     content = """
-    Hi {receiver}, I'm accounting bot
+    Hi, {receiver}!
 
     {payer} has made a payment of {amount} rub
     """.format(receiver = receiver, payer = payer, amount = formatNumber(amount))
@@ -38,12 +43,17 @@ def send_payment_email(receiver_email, receiver, payer, amount):
 
 
 
-def get_payment_email(receiver_email, receiver, payer, amount):
+def get_payment_email(receiver_email, receiver, payer, amount, test = False):
 
     msg = EmailMessage()
-    msg['Subject'] = "TEST Payment"
+
+    if test:
+        msg['Subject'] = "TEST Payment"
+    else:
+        msg['Subject'] = "Payment"
+
     content = """
-    Hi {payer}, I'm accounting bot
+    Hi, {payer}!
 
     You've made a payment of {amount} rub to {receiver}
     """.format(receiver = receiver, payer = payer, amount = formatNumber(amount))
@@ -53,6 +63,3 @@ def get_payment_email(receiver_email, receiver, payer, amount):
     with smtplib.SMTP_SSL('smtp.gmail.com', 465, context = ssl.create_default_context()) as server:
         server.login(sender, password)
         server.sendmail(sender, [receiver_email], msg.as_string())
-
-
-
