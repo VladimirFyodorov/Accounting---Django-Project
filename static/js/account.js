@@ -1,12 +1,33 @@
 window.addEventListener('DOMContentLoaded', function() {
     'use strict';
 
+    function animateAccountPopupWindow() {
+        let headerUserBox = document.querySelector('.header-right-menu-user-box'),
+            accountPopupWindow = document.querySelector('.account-popup-window'),
+            signout = document.querySelector('.account-popup-window-signountbox');
+            
+        headerUserBox.addEventListener('click', function() {
+            if (accountPopupWindow.style.display == 'none') {
+                accountPopupWindow.style.display = 'block';
+            } else {
+                accountPopupWindow.style.display = 'none';
+            }
+        });
+
+        signout.addEventListener('mouseover', function() {
+            this.style.backgroundColor = '#F8F8F8';
+        });
+
+        signout.addEventListener('mouseout', function() {
+            this.style.backgroundColor = '#FFFFFF';
+        });
+    }
+
+    animateAccountPopupWindow();
+
     let rows = document.getElementsByTagName('tr'),
         menuItems = document.querySelectorAll('.account-menu-items'),
-        tables = document.querySelectorAll('.account-table'),
-        userCircle = document.querySelector('.login-user-box-circle'),
-        accountPopupWindow = document.querySelector('.account-popup-window'),
-        signout = document.querySelector('.account-popup-window-signountbox');
+        tables = document.querySelectorAll('.account-table');
 
     function showTable(n) {
         for (let i = 0; i < tables.length; i++) {
@@ -54,21 +75,4 @@ window.addEventListener('DOMContentLoaded', function() {
             });
         }
     }
-
-    userCircle.addEventListener('click', function() {
-        if (accountPopupWindow.style.display == 'block') {
-            accountPopupWindow.style.display = 'none';
-        } else {
-            accountPopupWindow.style.display = 'block';
-        }
-    });
-
-
-    signout.addEventListener('mouseover', function() {
-        this.style.backgroundColor = '#F8F8F8';
-    });
-
-    signout.addEventListener('mouseout', function() {
-        this.style.backgroundColor = '#FFFFFF';
-    });
 });

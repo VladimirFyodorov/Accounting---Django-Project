@@ -11,6 +11,9 @@ import python_libs.send_email as se
 # clean terminal print("\033[H\033[J", end="")
 def index(request):
 
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('users:login'))
+
     ### declare main function ###
     acc_user = request.user
 
@@ -64,10 +67,8 @@ def index(request):
 
     ##################### main script #####################
     ########################################################
-    if not request.user.is_authenticated:
-        return HttpResponseRedirect(reverse('users:login'))
 
-    elif request.method != 'POST':
+    if request.method != 'POST':
         return render(request, 'users/account.html', {
                 'user': acc_user,
                 'first_name_first_letter': acc_user.first_name[0],

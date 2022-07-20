@@ -1,0 +1,42 @@
+div.main {
+    display: flex;
+    justify-content: flex-start;
+}
+
+
+div.bills-list-box {
+    width: 25vw;
+}
+
+div.bills-list-head {
+    height: 70px;
+    display: flex;
+    align-items: center;
+}
+
+div.bills-list-item {
+    height: 35px;
+    display: flex;
+    align-items: center;
+}
+
+div.bills-list-show-more {
+    margin-top: 16px;
+    width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#show-more {
+    cursor: pointer;
+}
+
+#show-less {
+    cursor: pointer;
+}
+
+
+div.bill {
+    background-color: gray;
+}

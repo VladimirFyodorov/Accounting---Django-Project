@@ -5,10 +5,21 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth import get_user_model
 
+##### API
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from .serializers import BillSerializer, ItemSerializer, Item_PaymentSerializer, UserSerializer
+import json
+
 from .models import Bill, Item, Item_Payment
 
 # Create your views here.
 def index(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('users:login'))
+
+    acc_user = request.user
+
     All_bills = Bill.objects.all()
     
     # not payed bills [bill_str, bill_id]
@@ -21,6 +32,9 @@ def index(request):
     User = get_user_model()
     users = User.objects.all()
     return render(request, 'bills/index.html', {
+            'user': acc_user,
+            'first_name_first_letter': acc_user.first_name[0],
+            'last_name_first_letter': acc_user.last_name[0],
             'not_payed_bills': not_payed_bills,
             'users': users
         })
@@ -103,4 +117,25 @@ def delete_payment(request, bill_id):
         Item_Payment.objects.filter(id = payment_id).delete()
         return HttpResponseRedirect(reverse('bills:bill', args=(bill_id, )))
 
+########################### APIs ###########################
+############################################################
 
+@api_view(['GET'])
+def get_bills(request):
+
+    not_payed_bills = []
+    for bill in Bill.objects.all():
+        if not bill.is_payed:
+            serializedBill = BillSerializer(bill).data
+
+            lender = get_user_model().objects.get(id = serializedBill["lender"])
+            serializedBill["lender"] = UserSerializer(lender).data
+
+
+            items = Item.objects.filter(bill = bill).all()
+            serializedBill["items"] = ItemSerializer(items, many = True).data
+
+
+            not_payed_bills.append(serializedBill)
+
+    return Response(not_payed_bills)
