@@ -131,11 +131,47 @@ def get_bills(request):
             lender = get_user_model().objects.get(id = serializedBill["lender"])
             serializedBill["lender"] = UserSerializer(lender).data
 
-
             items = Item.objects.filter(bill = bill).all()
             serializedBill["items"] = ItemSerializer(items, many = True).data
 
+            #making empty user dictionary
+            #{"first_name": {"amount", "is_payed"}}
+            paymentsByUser = {}
+            for user in get_user_model().objects.all():
+                paymentsByUser[user.first_name] = {"amount": 0, "is_payed": "True"}
 
+            for i in range(len(items)):
+                item = items[i]
+
+                # need that to not miss total sum
+                itemCost = item.cost_total
+
+                payments = Item_Payment.objects.filter(item_id = item.id).all()
+
+                #calculating amounts
+                for payment in payments:
+                    payerFistName = get_user_model().objects.get(id = payment.payer.id).first_name
+                    paymentsByUser[payerFistName]["amount"] += payment.paying_amount
+                    itemCost -= payment.paying_amount
+
+                    if not payment.is_payed:
+                        paymentsByUser[payerFistName]["is_payed"] = "False"
+                
+                #adding difference to lender
+                paymentsByUser[lender.first_name]["amount"] += itemCost
+
+            #transforming user dictionary to [{"name", "amount", "is_payed"}, {}]
+            paymentsByUserT = []
+            for user in get_user_model().objects.all():
+                obj = {"name": user.first_name}
+                obj["amount"] = round(paymentsByUser[user.first_name]["amount"])
+                obj["is_payed"] = paymentsByUser[user.first_name]["is_payed"]
+                paymentsByUserT.append(obj)
+
+            #adding final dictionary to bill object
+            serializedBill["payments"] = paymentsByUserT
+
+            # adding bill object to list of bills
             not_payed_bills.append(serializedBill)
 
     return Response(not_payed_bills)

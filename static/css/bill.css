@@ -113,3 +113,40 @@ div.bill-payment-box-item {
     width: 25%;
     text-align: right;
 }
+
+.bill-share-box {
+    margin-top: 30px;
+}
+
+.bill-share-box-item {
+    margin-bottom: 5px;
+    display: flex;
+}
+
+.bill-share-box-item-name {
+    width: 40%;
+}
+
+.bill-share-box-item-amount {
+    width: 15%;
+    text-align: right;
+}
+
+div.bill-share-box-item-is-payed {
+        border-radius: 50%;
+        border: 0.5px solid rgba(113, 113, 113, 1);
+        text-align: center;
+        margin-left: 15px;
+        padding-top: 5px;
+        height: 11px;
+        width: 16px;
+
+        font-size: 7px;
+        font-weight: bold;
+        color: rgba(58, 58, 58, 1);
+}
+
+div.bill-share-box-item-total {
+    margin-top: 20px;
+    display: flex;
+}

@@ -138,42 +138,93 @@ window.addEventListener('DOMContentLoaded', function() {
                                 billPaymentBoxItem = document.querySelector('.bill-payment-box-item'),
                                 billPaymentBox = document.querySelector('.bill-payment-box'),
                                 billDate = fomatDate(new Date(billData.date)),
-                                billName = `${billData.name} ${billDate} ${billData.lender.first_name}`;
+                                billName = `${billData.name} ${billDate} ${billData.lender.first_name}`,
+                                billShareBox = document.querySelector('.bill-share-box'),
+                                billShareBoxItem = document.querySelector('.bill-share-box-item'),
+                                total = document.querySelector('.bill-share-box-item-total'),
+                                totalAmount = total.children[1],
+                                totalAmountCalc = 0;
                             
                             billHeader.textContent = billName;
                             
                             // cleaning
                             removeinnerHTML(billPaymentBox);
+                            removeinnerHTML(billShareBox);
 
-                            // adding
+                            // adding items
                             for (let i = 0; i < billData.items.length; i++) {
                                 let item = billData.items[i],
-                                    billPaymentBoxItemClone = billPaymentBoxItem.cloneNode(true),
-                                    children = billPaymentBoxItemClone.children;
+                                    ItemClone = billPaymentBoxItem.cloneNode(true),
+                                    children = ItemClone.children;
                                 
-                                billPaymentBoxItemClone.style.display = 'flex';
+                                ItemClone.style.display = 'flex';
 
                                 children[0].textContent = item.name;
-                                children[1].textContent = item.cost_per_exemplar;
+                                children[1].textContent = item.cost_per_exemplar + ' ₽';
                                 children[2].textContent = 'x' + item.amount;
 
-                                billPaymentBox.appendChild(billPaymentBoxItemClone);
+                                billPaymentBox.appendChild(ItemClone);
                             }
+
+                            // adding payments
+                            for (let i = 0; i < billData.payments.length; i++) {
+                                let payment = billData.payments[i],
+                                    ItemClone = billShareBoxItem.cloneNode(true),
+                                    children = ItemClone.children,
+                                    colorPayed = 'rgba(113, 113, 113, 1)',
+                                    colorNotPayed = 'rgba(58, 58, 58, 1)';
+                                
+                                ItemClone.style.display = 'flex';
+
+                                children[0].textContent = payment.name;
+                                children[1].textContent = payment.amount + ' ₽';
+                                children[2].textContent = ' ₽';
+
+                                totalAmountCalc += payment.amount;
+
+                                if (payment.is_payed == "False") {
+                                    children[0].style.color = colorNotPayed;
+                                    children[1].style.color = colorNotPayed;
+                                    children[2].style.color = colorNotPayed;
+                                    children[2].style.borderWidth = '0px';
+
+                                } else {
+                                    children[0].style.color = colorPayed;
+                                    children[1].style.color = colorPayed;
+                                    children[2].style.color = colorPayed;
+                                    children[2].style.borderWidth = '0.5px';
+                                }
+
+                                billShareBox.appendChild(ItemClone);
+
+                                //adding total
+                                total.style.display = 'flex';
+                                totalAmount.textContent = totalAmountCalc + ' ₽';
+                            }
+
                         }
 
                         function hideBill() {
                             let billHeader = document.querySelector('.bill-header'),
                                 billPaymentBoxItem = document.querySelector('.bill-payment-box-item'),
-                                billPaymentBox = document.querySelector('.bill-payment-box');
+                                billPaymentBox = document.querySelector('.bill-payment-box'),
+                                billShareBox = document.querySelector('.bill-share-box'),
+                                billShareBoxItem = document.querySelector('.bill-share-box-item'),
+                                total = document.querySelector('.bill-share-box-item-total');
+
                             
                             billHeader.textContent = '';
                             
                             // cleaning
                             removeinnerHTML(billPaymentBox);
+                            removeinnerHTML(billShareBox);
+                            total.style.display = 'none';
 
-                            // saving one hidden item
+                            // saving one hidden item for future cloning
                             billPaymentBoxItem.style.display = 'none';
+                            billShareBoxItem.style.display = 'none';
                             billPaymentBox.appendChild(billPaymentBoxItem);
+                            billShareBox.appendChild(billShareBoxItem);
                         }
 
                         let showMoreBtn = document.querySelector('#show-more'),
