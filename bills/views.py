@@ -139,3 +139,8 @@ def get_bills(request):
             not_payed_bills.append(serializedBill)
 
     return Response(not_payed_bills)
+
+
+@api_view(['GET'])
+def get_all_users(request):
+    return Response(UserSerializer(get_user_model().objects.all(), many=True).data)

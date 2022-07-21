@@ -4,7 +4,14 @@
 <div class="main">
     <div class="bills-list-box">
         <div class="bills-list-head">
-            <h3 class="bold">Bills are payed by</h3>
+            <h3 class="bold" id="bills-are-payed-by">Bills are payed by</h3>
+            <i class="arrow down"></i>
+        </div>
+        <div class="bills-list-users-list" style="display:none;">
+            <div class="bills-list-users-list-item-current">
+                <div class="checkmark"></div>
+                <h5>All</h5>
+            </div>
         </div>
         <div class="bills-list">
         </div>
@@ -14,8 +21,15 @@
         </div>
     </div>
     
-    <div class="bill" style="display:none;">
-        <h2>Кантата</h2>
+    <div class="bill">
+        <h2 class="bill-header"></h2>
+        <div class="bill-payment-box">
+            <div class="bill-payment-box-item" style="display:none;">
+                <h4 class="bill-payment-box-item-name"></h4>
+                <h4 class="bill-payment-box-item-cost"></h4>
+                <h4 class="bill-payment-box-item-items"></h4>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

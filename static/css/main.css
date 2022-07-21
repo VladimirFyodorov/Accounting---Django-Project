@@ -1,6 +1,7 @@
 body {
     width: 100vw;
     font-family: 'PT Sans';
+    margin: 0px;
 }
 
 #page-container {
@@ -9,8 +10,9 @@ body {
 }
 
 #content-wrap {
-    padding-bottom: 2.5rem;   /* Footer height */
-    padding-left: 120px;
+    padding-bottom: 2.5rem;
+    /* Footer height */
+    padding-left: 8vw;
 }
 
 #footer {
@@ -18,7 +20,8 @@ body {
     padding-top: 10px;
     position: absolute;
     bottom: 0;
-    height: 40px;  /* Footer height */
+    height: 40px;
+    /* Footer height */
     font-size: 12px;
     color: rgba(58, 58, 58, 1);
 }
@@ -110,13 +113,16 @@ div.header-right-menu-user-box {
 
 #content-wrap {
     padding-top: 65px;
-    padding-bottom: 2.5rem;   /* Footer height */
+    padding-bottom: 2.5rem;
+    /* Footer height */
 }
 
 
 a {
-    color: inherit; /* blue colors for links too */
-    text-decoration: inherit; /* no underline */
+    color: inherit;
+    /* blue colors for links too */
+    text-decoration: inherit;
+    /* no underline */
 }
 
 div.account-popup-window {
@@ -191,4 +197,43 @@ h6 {
     font-weight: normal;
     margin: 0px;
     color: rgba(58, 58, 58, 1);
+}
+
+i.arrow {
+    border: solid rgba(58, 58, 58, 1);
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 4px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+i.right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+}
+
+i.left {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+}
+
+i.up {
+    margin-top: 10px;
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+}
+
+i.down {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+
+div.checkmark {
+    display: inline-block;
+    transform: rotate(45deg);
+    height: 10px;
+    width: 5px;
+    border-bottom: 2px solid rgba(58, 58, 58, 1);
+    border-right: 2px solid rgba(58, 58, 58, 1);
 }

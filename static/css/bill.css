@@ -5,20 +5,60 @@ div.main {
 
 
 div.bills-list-box {
-    width: 25vw;
+    width: 17vw;
 }
 
 div.bills-list-head {
-    height: 70px;
+    height: 50px;
+    padding-top: 10px;
     display: flex;
     align-items: center;
+}
+
+div.bills-list-users-list {
+    width: 180px;
+    padding-left: 28px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    margin-left: -28px;
+    background-color: rgba(248, 248, 248, 1);
+}
+
+
+div.bills-list-users-list-item {
+    padding-top: 3px;
+    padding-bottom: 3px;
+
+    cursor: pointer;
+}
+
+div.bills-list-users-list-item-current {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    background-color: rgba(231, 231, 231, 1);
+    margin-left: -28px;
+    padding-left: 28px;
+    display: flex;
+    align-items: center;
+
+    cursor: pointer;
+}
+
+div.bills-list {
+    margin-top: 0px;
 }
 
 div.bills-list-item {
     height: 35px;
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
+
+div.bills-list-item:hover {
+    background-color: rgba(248, 248, 248, 1)
+}
+
 
 div.bills-list-show-more {
     margin-top: 16px;
@@ -36,7 +76,40 @@ div.bills-list-show-more {
     cursor: pointer;
 }
 
+div.checkmark {
+    margin-left: -18px;
+    margin-right: 11px;
+}
 
 div.bill {
-    background-color: gray;
+    width: 25vw;
+    margin-left: 40px;
+    margin-top: 13px;
+}
+
+.bill-header {
+    margin-bottom: 10px;
+}
+
+div.bill-payment-box {
+    margin-bottom: 30px;
+}
+
+div.bill-payment-box-item {
+    margin-bottom: 7px;
+    display: flex;
+}
+
+.bill-payment-box-item-name {
+    width: 50%
+}
+
+.bill-payment-box-item-cost {
+    width: 25%;
+    text-align: right;
+}
+
+.bill-payment-box-item-items {
+    width: 25%;
+    text-align: right;
 }
